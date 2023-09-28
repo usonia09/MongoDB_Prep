@@ -62,9 +62,9 @@ class Routes {
 
   @Router.delete("/posts/:_id")
   async deletePost(session: WebSessionDoc, _id: ObjectId) {
-    // TODO 3: Delete the post with given _id
-    // Make sure the user deleting is the author of the post
-    throw new Error("Not implemented!");
+    const user = WebSession.getUser(session);
+    await Post.isAuthor(user, _id);
+    return await Post.delete(_id);
   }
 }
 

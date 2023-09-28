@@ -23,6 +23,18 @@ export default class PostConcept {
     return posts;
   }
 
+  async getAuthor(_id: ObjectId) {
+    const post = await this.posts.readOne({ _id });
+    return post?.author;
+  }
+
+  async isAuthor(user: ObjectId, _id: ObjectId) {
+    const author = (await this.posts.readOne({ _id }))?.author;
+    if (user !== author) {
+      throw new PostAuthorNotMatchError(user, _id);
+    }
+  }
+
   async delete(_id: ObjectId) {
     await this.posts.deleteOne({ _id });
     return { msg: "Post deleted successfully!" };
